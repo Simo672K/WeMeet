@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"WeMeet/api/routes"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,8 @@ import (
 func RunServer() {
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
+	routes.ChatRoutes(router)
+	router.GET("/hello", func(c *gin.Context) {
 		c.String(200, "Hello, World!")
 	})
 
