@@ -7,5 +7,5 @@ import (
 )
 
 func ChatRoutes(r *gin.Engine) {
-	r.GET("/", controllers.RoomController)
+	r.GET("/room/:id", controllers.RoomController)
 }

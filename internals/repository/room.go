@@ -2,9 +2,9 @@ package repository
 
 import (
 	"WeMeet/pkg/utils"
+	"WeMeet/services/chatservice"
 	"context"
-	"fmt"
-	"log"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -13,7 +13,7 @@ type RoomRepository struct {
 	DBClient *redis.Client
 }
 
-func (r *RoomRepository) CreateRoom() {
+func (r *RoomRepository) CreateRoom(roomName string) {
 	ctx := context.Background()
 
 	randId, err := utils.RandomString(31)
@@ -21,17 +21,20 @@ func (r *RoomRepository) CreateRoom() {
 		panic(err)
 	}
 
+	newChatRoomMedata := chatservice.ChatRoomMetaData{
+		Id:        randId,
+		RoomName:  roomName,
+		ExpiresIn: int(time.Hour),
+	}
+	newChatRoom := chatservice.ChatRoom{
+		ChatRoomMetaData: newChatRoomMedata,
+	}
+	newChatRoom.InitRoomChannels()
+
 	err = r.DBClient.Set(ctx, randId, "world", 0).Err()
 	if err != nil {
 		panic(err)
 	}
-
-	result, err := r.DBClient.Get(ctx, randId).Result()
-	if err != nil {
-		log.Fatal("An error occured while retriving data from db ", err)
-	}
-
-	fmt.Println(result)
 }
 
 func (r *RoomRepository) FindRoom() {
