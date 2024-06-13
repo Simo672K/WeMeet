@@ -16,6 +16,7 @@ func RoomController(c *gin.Context) {
 	// }
 
 	// roomRepo.CreateRoom("test")
-	chatservice.RunChatService(c.Writer, c.Request)
+	room := chatservice.ChatRoom{}
+	room.StartChatService(c.Writer, c.Request)
 	// c.String(200, "Room service")
 }

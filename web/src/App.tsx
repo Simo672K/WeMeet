@@ -1,26 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function App() {
-  const [data, setData] = useState("")
-  const msg = {
-    content: "hello",
-  };
-  
-
   useEffect(() => {
-    const socket = new WebSocket("http://localhost:8080/room/somerandomid");
+    const socket = new WebSocket("ws://localhost:8080/room/id");
 
     socket.addEventListener("open", (event: Event) => {
-      socket.send(JSON.stringify(msg))
+      socket.send("hello, world! This is a message from react to golang");
     });
 
-    socket.addEventListener("message", (event: MessageEvent) => {
-      console.log("Message from server ", event.data);
-      setData(JSON.parse(event.data).message)
-    });
-
+    // socket.addEventListener("message", (event: MessageEvent) => {
+    //   console.log("Message from server ", event.data);
+    // });
   }, []);
-  return <>hello there, the message is: "{data}"</>;
+  return <h1>hello there</h1>;
 }
 
 export default App;
